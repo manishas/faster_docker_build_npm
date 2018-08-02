@@ -33,7 +33,7 @@ resources:
   - name: nightly_trigger
     type: time
     versionTemplate:
-      interval: "*/2 * * * *"
+      interval: "0 0 * * *"
 
 jobs:
   - name: faster_docker_build_npm_runCI
