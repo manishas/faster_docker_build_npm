@@ -35,6 +35,7 @@ resources:
     versionTemplate:
       interval: "*/2 * * * *"
 
+jobs:
   - name: faster_docker_build_npm_runCI
     type: runCI
     steps:
