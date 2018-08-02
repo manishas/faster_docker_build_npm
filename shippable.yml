@@ -1,0 +1,36 @@
+# Language setting http://docs.shippable.com/ci/languages/node/
+language: node_js
+
+# use this to control what branches get built.
+# http://docs.shippable.com/ci/advancedOptions/branches/
+branches:
+  only:
+    - master
+
+build:
+  ci:
+    - >
+      if [ "$JOB_TRIGGERED_BY" == "nightly_trigger" ]; then
+        docker build -t manishas/nightlyimage:latest --build-arg IMAGE=readytalk/nodejs --build-arg TAG=latest . &&
+        docker push manishas/nightlyimage:latest;
+      fi;
+    - >
+      if [ "$JOB_TRIGGERED_BY" != "nightly_trigger" ]; then
+        docker build -t manishas/node_app_img:latest --build-arg IMAGE=manishas/nightlyimage --build-arg TAG=latest . &&
+        docker push manishas/node_app_img:latest;
+      fi;
+
+    #- if [ "$JOB_TRIGGERED_BY" == "nightly_trigger" ]; then docker build -t manishas/nightlyimage:latest --build-arg IMAGE=readytalk/nodejs --build-arg TAG=latest .; fi
+    #- if [ "$JOB_TRIGGERED_BY" != "nightly_trigger" ]; then docker build -t manishas/node_app_img:latest --build-arg IMAGE=manishas/nightlyimage --build-arg TAG=latest .; fi
+
+## OPTIONAL : In case you want to use this image in CD Assembly Lines
+resources:
+  - name: nightly_trigger
+    type: time
+    versionTemplate:
+      interval: "*/2 * * * *"
+
+  - name: faster_docker_build_npm_runCI
+    type: runCI
+    steps:
+      - IN: nightly_trigger
