@@ -43,7 +43,7 @@
     "ursa": "0.9.4",
     "validator": "6.1.0",
     "winston": "2.2.0"
-  }
+  },
   "jshintConfig": {
     "node": true,
     "undef": true,
